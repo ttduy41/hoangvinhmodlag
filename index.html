@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOP MENU THẬP CẨM ADR&PC | vinhmodlag.store</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <style>
+        :root { --primary: #00f2ff; --bg: #0d1117; --card: #161b22; --text: #c9d1d9; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .auth-box { background: var(--card); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; border: 1px solid #30363d; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #0d1117; color: white; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background: var(--primary); color: #000; margin-top: 10px; }
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
+        .tab { flex: 1; padding: 10px; cursor: pointer; color: #8b949e; }
+        .tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="auth-box" id="auth-ui">
+        <h2 style="color: var(--primary);">VINHMODLAG.STORE</h2>
+        <div class="tabs">
+            <div id="t-login" class="tab active" onclick="switchTab('login')">Đăng Nhập</div>
+            <div id="t-reg" class="tab" onclick="switchTab('reg')">Đăng Ký</div>
+        </div>
+        <input type="text" id="u-email" placeholder="Nhập Số điện thoại hoặc Email">
+        <input type="password" id="u-pass" placeholder="Mật khẩu">
+        <button class="btn" onclick="handleAuth()" id="btn-text">VÀO CỬA HÀNG</button>
+    </div>
+
+    <script>
+        // ĐÂY LÀ MÃ THẬT CỦA DUY ĐÃ ĐƯỢC CHÈN VÀO
+        const firebaseConfig = {
+          apiKey: "AIzaSyDQh9wzSEwVEYe0VbPyfTnWi5aGS-lo7iY",
+          authDomain: "vinhmod-e6ebe.firebaseapp.com",
+          projectId: "vinhmod-e6ebe",
+          storageBucket: "vinhmod-e6ebe.firebasestorage.app",
+          messagingSenderId: "280126075845",
+          appId: "1:280126075845:web:7d443d6ca997d5aa37d1ac",
+          measurementId: "G-CP40QM3EFF"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        let mode = 'login';
+
+        function switchTab(m) {
+            mode = m;
+            document.getElementById('t-login').classList.toggle('active', m === 'login');
+            document.getElementById('t-reg').classList.toggle('active', m === 'reg');
+            document.getElementById('btn-text').innerText = m === 'login' ? 'VÀO CỬA HÀNG' : 'TẠO TÀI KHOẢN MỚI';
+        }
+
+        function handleAuth() {
+            let email = document.getElementById('u-email').value;
+            if(!email.includes('@')) email += "@vinhmod.com"; // Tự tạo email giả từ SĐT
+            const pass = document.getElementById('u-pass').value;
+
+            if (mode === 'reg') {
+                auth.createUserWithEmailAndPassword(email, pass)
+                    .then(() => alert("Đăng ký thành công! Hãy chuyển sang Đăng nhập."))
+                    .catch(e => alert("Lỗi: " + e.message));
+            } else {
+                auth.signInWithEmailAndPassword(email, pass)
+                    .then(() => alert("Đã vào cửa hàng thành công!"))
+                    .catch(e => alert("Sai tài khoản hoặc mật khẩu!"));
+            }
+        }
+    </script>
+</body>
+</html>
